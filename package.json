@@ -13,5 +13,7 @@
   "author": "mlbors",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.1",
+    "mongodb": "^2.2.31"
   }
 }

@@ -1,17 +1,15 @@
 const http = require('http')
+const express = require('express')
 
-const hostname = '0.0.0.0';
+const app = express()
+
+const hostname = '0.0.0.0'
 const port = process.env.PORT || 3000
 
-const server = http.createServer((req, res) => {
+app.get('/', (req, res) => {
+  res.end('Hello World!')
+})
 
-  if (req.method === 'GET') {    
-
-    res.writeHead(200, {'Content-Type': 'application/json'})    
-    res.end()
-
-  }
-
-}).listen(port, hostname, function(){
+app.listen(port, hostname, function(){
   console.log('Server running at http://${' + hostname + '}:${' + port + '}/');
 })
