@@ -14,8 +14,9 @@
 
 const http = require('http')
 const express = require('express')
-const validUrl = require('valid-url')
 const mongodb = require('mongodb')
+
+const index = require('./routes/index');
 
 /************************************************************/
 /************************************************************/
@@ -46,7 +47,7 @@ const MongoClient = mongodb.MongoClient
 
 const app = express('mongodb')
 
-MongoClient.connect(dbURL, function(err, db) {
+MongoClient.connect(dbURL, (err, db) => {
 
   if (err) {
     throw new Error('Database failed to connect!');
@@ -61,34 +62,12 @@ MongoClient.connect(dbURL, function(err, db) {
   /***** ROUTES *****/
   /******************/
 
-  /*****/
-  /***** HOME *****/
-  /*****/
+  app.use('/', index)
 
-  app.get('/', (req, res) => {
-    res.end('Hello World!')
-  })
-
-  /************************************************************/
-  /************************************************************/
-
-  /*****/
-  /***** NEW *****/
-  /*****/
-
-  app.get("/new/*", (req,res) => {
-
-    let url = req.params[0]
-    console.log(url)
-
-    if (validUrl.isUri(url)) {
-      console.log('valid url')
-      res.end('Valid url')
-    } else {
-      console.log('invalid url')
-      res.end('Invalid url')
-    }
-
+  app.use((req, res, next) => {
+    var err = new Error('Not Found')
+    err.status = 404
+    next(err)
   })
     
   /************************************************************/
