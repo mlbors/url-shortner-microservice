@@ -16,7 +16,7 @@ const express = require('express');
 const validUrl = require('valid-url')
 const router = express.Router();
 
-var urlQuery = require('../db/url');
+const urlQuery = require('../db/url');
 
 /************************************************************/
 /************************************************************/
@@ -30,7 +30,7 @@ var urlQuery = require('../db/url');
 /*****/
 
 router.get('/', (req, res) => {
-  res.end('Hello World!')
+  res.send('Hello World!')
 })
 
 /************************************************************/
@@ -40,31 +40,88 @@ router.get('/', (req, res) => {
 /***** NEW *****/
 /*****/
 
-router.get("/new/*", (req,res) => {
+router.get("/new/*", (req, res) => {
   
   let url = req.params[0]
   console.log(url)
 
   if (validUrl.isUri(url)) {
-    console.log('valid url')
+    console.log('Valid url')
 
     urlQuery.find(url, (err, data) => {
 
-      if(err) {
-        res.end('Valid url - error')
+      if (err) {
+        res.send({error: 'Valid url - error'})
         return
       }
-      if(data.length == 0) {
-        res.end('Valid url - not found')
+
+      if (data.length == 0) {
+
+        urlQuery.addUrl(url, req, (err, data) => {
+
+          if (err) {
+            res.send({error: 'Error while inserting url', err: err})
+            return
+          } 
+
+          res.send({
+            shorturl: data.shorturl,
+            info: 'URL added'
+          })
+          return
+
+        })
+        
+      } else {
+        console.log(data)
+        res.send({
+          shorturl: data[0].shorturl,
+          info: 'URL already shortned'
+        })
         return
       }
+
+      
 
     })
 
   } else {
-    console.log('invalid url')
-    res.end('Invalid url')
+    console.log('Invalid url')
+    res.send({error: 'Invalid url'})
   }
+
+})
+
+/************************************************************/
+/************************************************************/
+
+/*****/
+/***** ID *****/
+/*****/
+
+router.get("/:id", (req, res) => {
+  
+  let id = req.params.id
+
+  urlQuery.findShortUrl(id, (err, data) => {
+
+    console.log(id)
+
+    if (err) {
+      res.send({error: 'Error while querying short url', id: id})
+      return
+    }
+    
+    console.log(data)
+
+    if (data.length == 0) {
+      res.send({error: 'Short url not found', id: id})
+      return
+    }
+
+    res.redirect(data.url)
+
+  })
 
 })
 

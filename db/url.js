@@ -14,6 +14,8 @@
 
 const mongodb = require('mongodb')
 
+const shortner = require('../services/shortner');
+
 /************************************************************/
 /************************************************************/
 
@@ -35,21 +37,91 @@ const MongoClient = mongodb.MongoClient
 /************************************************************/
 /************************************************************/
 
+/********************/
+/***** FIND URL *****/
+/********************/
+
+/*
+ * @var String str url to search
+ * @var Function callback a callback function
+ */
+
 exports.find = (str, callback) => {
 
   MongoClient.connect(dbURL, (err, db) => {
 
-    if (err) return callback(err);
+    if (err) return callback(err)
 
     db.collection('shortner-microservice').find({
       url: str
-    }).toArray(function(err, docs) {
-      if (err) return callback(err);
-      db.close();
-      console.log(docs);
-      return callback(null, docs);
+    }).toArray(function(err, result) {
+      if (err) return callback(err)
+      db.close()
+      console.log(result)
+      return callback(null, result)
     })
 
+  })
+
+}
+
+/************************************************************/
+/************************************************************/
+
+/*******************/
+/***** FIND ID *****/
+/*******************/
+
+/*
+ * @var String id id to search
+ * @var Function callback a callback function
+ */
+
+exports.findShortUrl = (id, callback) => {
+  
+  MongoClient.connect(dbURL, (err, db) => {
+
+    if (err) return callback(err)
+
+    db.collection('shortner-microservice').findOne({
+      id: id
+    }).then((err, result) => {
+      if (err) return callback(err)
+      db.close()
+      return callback(null, result)
+    })
+  })
+
+}
+
+/************************************************************/
+/************************************************************/
+
+/*******************/
+/***** ADD URL *****/
+/*******************/
+
+exports.addUrl = (url, req, callback) => {
+  
+  MongoClient.connect(dbURL, (err, db) => {
+
+    if (err) return callback(err)
+
+    const id = shortner.generate()
+
+    const base = req.url.slice(5);
+    const host = req.get('host');
+
+    db.collection('shortner-microservice').insertOne({
+      _id: id,
+      url: url,
+      shorturl: host + '/' + id
+    }).then((err, result) => {
+      if (err) return callback(err)
+      db.close()
+      console.log(result)
+      return callback(null, result)
+    })
   })
 
 }
