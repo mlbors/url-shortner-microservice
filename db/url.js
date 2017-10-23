@@ -57,7 +57,6 @@ exports.find = (str, callback) => {
     }).toArray(function(err, result) {
       if (err) return callback(err)
       db.close()
-      console.log(result)
       return callback(null, result)
     })
 
@@ -112,15 +111,16 @@ exports.addUrl = (url, req, callback) => {
     const base = req.url.slice(5);
     const host = req.get('host');
 
-    db.collection('shortner-microservice').insertOne({
+    const item = {
       _id: id,
       url: url,
       shorturl: host + '/' + id
-    }).then((err, result) => {
+    }
+
+    db.collection('shortner-microservice').insertOne(item).then((err, result) => {
       if (err) return callback(err)
       db.close()
-      console.log(result)
-      return callback(null, result)
+      return callback(null, item)
     })
   })
 

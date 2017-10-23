@@ -43,7 +43,6 @@ router.get('/', (req, res) => {
 router.get("/new/*", (req, res) => {
   
   let url = req.params[0]
-  console.log(url)
 
   if (validUrl.isUri(url)) {
     console.log('Valid url')
@@ -60,7 +59,7 @@ router.get("/new/*", (req, res) => {
         urlQuery.addUrl(url, req, (err, data) => {
 
           if (err) {
-            res.send({error: 'Error while inserting url', err: err})
+            res.send({error: 'Error while inserting url', err: err, url: url, data: data})
             return
           } 
 
