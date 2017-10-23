@@ -27,7 +27,7 @@ const index = require('./routes/index');
 
 const hostname = '0.0.0.0'
 const port = process.env.PORT || 3000
-const dbURL = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/shortner-microservice';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice';
 
 /************************************************************/
 /************************************************************/
@@ -70,18 +70,6 @@ MongoClient.connect(dbURL, (err, db) => {
     next(err)
   })
 
-  app.get('/favicon.ico', (req, res) => {
-    res.status(204)
-  });
-
-  app.use((req, res, next) => {
-    if (req.originalUrl === '/favicon.ico') {
-      res.status(204).json({nope: true})
-    } else {
-      next()
-    }
-  })
-    
   /************************************************************/
   /************************************************************/
 
