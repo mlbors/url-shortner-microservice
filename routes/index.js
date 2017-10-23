@@ -45,12 +45,11 @@ router.get("/new/*", (req, res) => {
   let url = req.params[0]
 
   if (validUrl.isUri(url)) {
-    console.log('Valid url')
 
     urlQuery.find(url, (err, data) => {
 
       if (err) {
-        res.send({error: 'Valid url - error'})
+        res.send({error: err, url: url, info: 'valid url'})
         return
       }
 
@@ -72,7 +71,6 @@ router.get("/new/*", (req, res) => {
         })
         
       } else {
-        console.log(data)
         res.send({
           shorturl: data[0].shorturl,
           info: 'URL already shortned'
@@ -85,8 +83,7 @@ router.get("/new/*", (req, res) => {
     })
 
   } else {
-    console.log('Invalid url')
-    res.send({error: 'Invalid url'})
+    res.send({error: 'Invalid url', url: url})
   }
 
 })
@@ -104,14 +101,10 @@ router.get("/:id", (req, res) => {
 
   urlQuery.findShortUrl(id, (err, data) => {
 
-    console.log(id)
-
     if (err) {
       res.send({error: 'Error while querying short url', id: id})
       return
     }
-    
-    console.log(data)
 
     if (data.length == 0) {
       res.send({error: 'Short url not found', id: id})
