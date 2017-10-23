@@ -23,7 +23,7 @@ const shortner = require('../services/shortner');
 /***** SETTINGS *****/
 /********************/
 
-const dbURL = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/shortner-microservice';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice';
 
 /************************************************************/
 /************************************************************/
