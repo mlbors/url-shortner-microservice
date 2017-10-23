@@ -77,9 +77,7 @@ router.get("/new/*", (req, res) => {
         })
         return
       }
-
       
-
     })
 
   } else {
@@ -111,6 +109,7 @@ router.get("/:id", (req, res) => {
       return
     }
 
+    console.log('Redirect to ' + data.url)
     res.redirect(data.url)
 
   })

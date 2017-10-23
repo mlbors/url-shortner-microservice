@@ -54,7 +54,7 @@ exports.find = (str, callback) => {
 
     db.collection('shortner-microservice').find({
       url: str
-    }).toArray(function(err, result) {
+    }).toArray((err, result) => {
       if (err) return callback(err)
       db.close()
       return callback(null, result)
@@ -88,6 +88,10 @@ exports.findShortUrl = (id, callback) => {
       if (err) return callback(err)
       db.close()
       return callback(null, result)
+    }).catch((e) => {
+      console.log('Promise rejected')
+      console.log(e)
+      console.log('id:' + id)
     })
   })
 
@@ -121,6 +125,10 @@ exports.addUrl = (url, req, callback) => {
       if (err) return callback(err)
       db.close()
       return callback(null, item)
+    }).catch((e) => {
+      console.log('Promise rejected')
+      console.log(e)
+      console.log('url:' + url)
     })
   })
 
