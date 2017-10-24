@@ -12,11 +12,11 @@
 /***** IMPORTS *****/
 /*******************/
 
-const express = require('express');
+const express = require('express')
 const validUrl = require('valid-url')
-const router = express.Router();
+const router = express.Router()
 
-const urlQuery = require('../db/url');
+const urlQuery = require('../db/url')
 
 /************************************************************/
 /************************************************************/
@@ -104,12 +104,11 @@ router.get("/:id", (req, res) => {
       return
     }
 
-    if (data.length == 0) {
+    if (data === null || data.length == 0) {
       res.send({error: 'Short url not found', id: id})
       return
     }
 
-    console.log('Redirect to ' + data.url)
     res.redirect(data.url)
 
   })
@@ -119,8 +118,8 @@ router.get("/:id", (req, res) => {
 /************************************************************/
 /************************************************************/
 
-/*****/
+/******************/
 /***** EXPORT *****/
-/*****/
+/******************/
 
-module.exports = router;
+module.exports = router

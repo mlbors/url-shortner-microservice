@@ -15,8 +15,10 @@
 const http = require('http')
 const express = require('express')
 const mongodb = require('mongodb')
+const favicon = require('serve-favicon')
+const path = require('path')
 
-const index = require('./routes/index');
+const index = require('./routes/index')
 
 /************************************************************/
 /************************************************************/
@@ -26,8 +28,8 @@ const index = require('./routes/index');
 /********************/
 
 const hostname = '0.0.0.0'
-const port = process.env.PORT || 3000
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice';
+const port = process.env.PORT || 4000
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice'
 
 /************************************************************/
 /************************************************************/
@@ -50,9 +52,9 @@ const app = express('mongodb')
 MongoClient.connect(dbURL, (err, db) => {
 
   if (err) {
-    throw new Error('Database failed to connect!');
+    throw new Error('Database failed to connect!')
   } else {
-      console.log('Successfully connected to MongoDB on port 27017.');
+      console.log('Successfully connected to MongoDB on port 27017.')
   }
 
   /************************************************************/
@@ -61,6 +63,8 @@ MongoClient.connect(dbURL, (err, db) => {
   /******************/
   /***** ROUTES *****/
   /******************/
+
+  app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
   app.use('/', index)
 

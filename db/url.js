@@ -14,7 +14,7 @@
 
 const mongodb = require('mongodb')
 
-const shortner = require('../services/shortner');
+const shortner = require('../services/shortner')
 
 /************************************************************/
 /************************************************************/
@@ -23,7 +23,7 @@ const shortner = require('../services/shortner');
 /***** SETTINGS *****/
 /********************/
 
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice';
+const dbURL = process.env.MONGODB_URI || 'mongodb://localhost:27017/shortner-microservice'
 
 /************************************************************/
 /************************************************************/
@@ -83,16 +83,13 @@ exports.findShortUrl = (id, callback) => {
     if (err) return callback(err)
 
     db.collection('shortner-microservice').findOne({
-      id: id
-    }).then((err, result) => {
+      _id: id
+    }, (err, result) => {
       if (err) return callback(err)
       db.close()
       return callback(null, result)
-    }).catch((e) => {
-      console.log('Promise rejected')
-      console.log(e)
-      console.log('id:' + id)
     })
+
   })
 
 }
@@ -112,8 +109,8 @@ exports.addUrl = (url, req, callback) => {
 
     const id = shortner.generate()
 
-    const base = req.url.slice(5);
-    const host = req.get('host');
+    const base = req.url.slice(5)
+    const host = req.get('host')
 
     const item = {
       _id: id,
@@ -121,14 +118,10 @@ exports.addUrl = (url, req, callback) => {
       shorturl: host + '/' + id
     }
 
-    db.collection('shortner-microservice').insertOne(item).then((err, result) => {
+    db.collection('shortner-microservice').insertOne(item, (err, data) => {
       if (err) return callback(err)
       db.close()
       return callback(null, item)
-    }).catch((e) => {
-      console.log('Promise rejected')
-      console.log(e)
-      console.log('url:' + url)
     })
   })
 
